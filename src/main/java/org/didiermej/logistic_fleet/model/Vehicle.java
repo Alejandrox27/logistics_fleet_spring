@@ -37,7 +37,7 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     @Column(name = "fuel_type", columnDefinition = "fuel_type")
     private FuelType fuelType;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "vehicle_status")
     private VehicleStatus status;
