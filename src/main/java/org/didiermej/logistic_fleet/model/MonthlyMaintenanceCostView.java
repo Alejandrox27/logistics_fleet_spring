@@ -1,9 +1,6 @@
 package org.didiermej.logistic_fleet.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Immutable;
 
@@ -12,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Immutable // Indica que es de solo lectura (no permite INSERT/UPDATE)
+@IdClass(MonthlyMaintenanceCostId.class)
 @Table(name = "vw_monthly_maintenance_cost")
 public class MonthlyMaintenanceCostView {
 
@@ -23,6 +21,8 @@ public class MonthlyMaintenanceCostView {
     private String numberPlate;
 
     private String brand;
+
+    @Id
     private LocalDate month;
 
     @Column(name = "total_cost")
