@@ -17,6 +17,13 @@ public interface MaintenanceRepo extends JpaRepository<Maintenance, Integer> {
     // Procedimiento almacenado: registrar mantenimiento
     @Procedure(procedureName = "register_maintenance")
     void registerMaintenance (
+            @Param("p_id_vehicle") Integer idVehicle,
+            @Param("p_cost") Double cost,
+            @Param("p_description") String description
+    );
+
+    @Procedure(procedureName = "finish_maintenance")
+    void finishMaintenance (
             @Param("p_id_vehicle") Integer idVehicle
     );
 }
