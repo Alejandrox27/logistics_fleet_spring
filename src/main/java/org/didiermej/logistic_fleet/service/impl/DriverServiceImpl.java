@@ -50,6 +50,11 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public List<LicenseCategory> getAllLicenseCategories() {
+        return licenseCategoryRepo.findAll();
+    }
+
+    @Override
     @Transactional
     public DriverLicense addLicenseToDriver(Integer driverId, Integer categoryId,
                                             LocalDate issueDate, LocalDate expiryDate, String description)
