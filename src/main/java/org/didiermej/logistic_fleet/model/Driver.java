@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.didiermej.logistic_fleet.model.enums.DriverStatus;
 
 import java.time.LocalDate;
 

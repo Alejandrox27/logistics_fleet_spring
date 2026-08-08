@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.didiermej.logistic_fleet.model.enums.FuelType;
+import org.didiermej.logistic_fleet.model.enums.VehicleStatus;
 
 @Data
 @AllArgsConstructor

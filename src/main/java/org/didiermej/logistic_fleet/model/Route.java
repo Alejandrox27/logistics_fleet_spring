@@ -2,6 +2,7 @@ package org.didiermej.logistic_fleet.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.didiermej.logistic_fleet.model.enums.RouteStatus;
 
 import java.time.LocalDate;
 
