@@ -1,0 +1,56 @@
+package org.didiermej.logistic_fleet.service.impl;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.didiermej.logistic_fleet.model.Route;
+import org.didiermej.logistic_fleet.repository.RouteRepo;
+import org.didiermej.logistic_fleet.service.RouteService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class RouteServiceImpl implements RouteService {
+    private final RouteRepo routeRepo;
+
+    @Override
+    public Route save(Route route) {
+        return routeRepo.save(route);
+    }
+
+    @Override
+    public Route update(Integer id, Route route) {
+        route.setIdRoute(id);
+        return routeRepo.save(route);
+    }
+
+    @Override
+    public List<Route> findAll() {
+        return routeRepo.findAll();
+    }
+
+    @Override
+    public Route findById(Integer id) {
+        return routeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("The route with id " + id + " does not exist"));
+    }
+
+    @Override
+    public void delete(Integer id) {
+        routeRepo.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void createRoute(String origin, String destination, Integer idVehicle, Integer idDriver, LocalDate travelDate, Double distance) {
+        routeRepo.createRoute(origin, destination, idVehicle, idDriver, travelDate, distance);
+    }
+
+    @Transactional
+    @Override
+    public void completeRoute(Integer idRoute, Double fuelConsumed, Double distance) {
+        routeRepo.completeRoute(idRoute, fuelConsumed, distance);
+    }
+}
