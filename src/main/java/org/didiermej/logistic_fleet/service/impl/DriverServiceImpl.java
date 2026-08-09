@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Driver;
 import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
+import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
 import org.didiermej.logistic_fleet.repository.DriverLicenseRepo;
 import org.didiermej.logistic_fleet.repository.DriverRepo;
 import org.didiermej.logistic_fleet.repository.LicenseCategoryRepo;
@@ -56,24 +57,23 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverLicense addLicenseToDriver(Integer driverId, Integer categoryId,
-                                            LocalDate issueDate, LocalDate expiryDate, String description)
+    public DriverLicense addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest)
     {
         // 1. validar que el conductor exista
-        Driver driver = driverRepo.findById(driverId)
-                .orElseThrow(() -> new RuntimeException("The driver with id " + driverId + " does not exist"));
+        Driver driver = driverRepo.findById(addLicenseDriverRequest.getDriverId())
+                .orElseThrow(() -> new RuntimeException("The driver with id " + addLicenseDriverRequest.getDriverId() + " does not exist"));
 
         // 2. validar que lla categoria exista
-        LicenseCategory category = licenseCategoryRepo.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("The category with id " + categoryId + " does not exist"));
+        LicenseCategory category = licenseCategoryRepo.findById(addLicenseDriverRequest.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("The category with id " + addLicenseDriverRequest.getCategoryId() + " does not exist"));
 
 
         DriverLicense driverLicense = new DriverLicense();
         driverLicense.setDriver(driver);
         driverLicense.setCategory(category);
-        driverLicense.setDescription(description);
-        driverLicense.setIssueDate(issueDate);
-        driverLicense.setExpiryDate(expiryDate);
+        driverLicense.setDescription(addLicenseDriverRequest.getDescription());
+        driverLicense.setIssueDate(addLicenseDriverRequest.getIssueDate());
+        driverLicense.setExpiryDate(addLicenseDriverRequest.getExpiryDate());
 
         return driverLicenseRepo.save(driverLicense);
     }

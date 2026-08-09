@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Driver;
 import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
+import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
 import org.didiermej.logistic_fleet.repository.DriverLicenseRepo;
 import org.didiermej.logistic_fleet.repository.DriverRepo;
 import org.didiermej.logistic_fleet.repository.LicenseCategoryRepo;
@@ -22,7 +23,5 @@ public interface DriverService {
 
     List<LicenseCategory> getAllLicenseCategories();
 
-    DriverLicense addLicenseToDriver(
-            Integer driverId, Integer categoryId, LocalDate issueDate, LocalDate expiryDate, String description
-    );
+    DriverLicense addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest);
 }
