@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
+import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
 import org.didiermej.logistic_fleet.repository.MaintenanceRepo;
 import org.didiermej.logistic_fleet.repository.MonthlyMaintenanceCostViewRepo;
 import org.didiermej.logistic_fleet.repository.VehicleRepo;
@@ -49,8 +50,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Transactional
     @Override
-    public void registerMaintenance(Integer vehicleId, Double cost, String description) {
-        maintenanceRepo.registerMaintenance(vehicleId, cost, description);
+    public void registerMaintenance(Integer vehicleId, RegisterMaintenanceRequest registerMaintenanceRequest) {
+        maintenanceRepo.registerMaintenance(
+                vehicleId,
+                registerMaintenanceRequest.getCost(),
+                registerMaintenanceRequest.getDescription()
+        );
     }
 
     @Transactional

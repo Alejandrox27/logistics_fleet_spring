@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class registerMaintenanceRequest {
+public class RegisterMaintenanceRequest {
     Double cost;
     String description;
 }

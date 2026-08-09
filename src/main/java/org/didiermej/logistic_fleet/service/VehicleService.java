@@ -2,6 +2,7 @@ package org.didiermej.logistic_fleet.service;
 
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
+import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface VehicleService {
     Vehicle findById (Integer id);
     void delete (Integer id);
 
-    void registerMaintenance(Integer vehicleId, Double cost, String description);
+    void registerMaintenance(Integer vehicleId, RegisterMaintenanceRequest registerMaintenanceRequest);
 
     void finishMaintenance(Integer vehicleId);
 
