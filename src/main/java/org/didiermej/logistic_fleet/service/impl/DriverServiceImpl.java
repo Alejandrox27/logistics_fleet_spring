@@ -12,7 +12,6 @@ import org.didiermej.logistic_fleet.repository.LicenseCategoryRepo;
 import org.didiermej.logistic_fleet.service.DriverService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -57,7 +56,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverLicense addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest)
+    public void addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest)
     {
         // 1. validar que el conductor exista
         Driver driver = driverRepo.findById(addLicenseDriverRequest.getDriverId())
@@ -75,6 +74,6 @@ public class DriverServiceImpl implements DriverService {
         driverLicense.setIssueDate(addLicenseDriverRequest.getIssueDate());
         driverLicense.setExpiryDate(addLicenseDriverRequest.getExpiryDate());
 
-        return driverLicenseRepo.save(driverLicense);
+        driverLicenseRepo.save(driverLicense);
     }
 }

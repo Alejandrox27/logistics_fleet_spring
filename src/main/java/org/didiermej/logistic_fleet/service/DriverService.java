@@ -1,16 +1,10 @@
 package org.didiermej.logistic_fleet.service;
 
-import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Driver;
-import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
 import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
-import org.didiermej.logistic_fleet.repository.DriverLicenseRepo;
-import org.didiermej.logistic_fleet.repository.DriverRepo;
-import org.didiermej.logistic_fleet.repository.LicenseCategoryRepo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,5 +17,5 @@ public interface DriverService {
 
     List<LicenseCategory> getAllLicenseCategories();
 
-    DriverLicense addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest);
+    void addLicenseToDriver(AddLicenseDriverRequest addLicenseDriverRequest);
 }
