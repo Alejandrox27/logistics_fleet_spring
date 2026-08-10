@@ -2,6 +2,7 @@ package org.didiermej.logistic_fleet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Driver;
+import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
 import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
 import org.didiermej.logistic_fleet.service.DriverService;
@@ -37,6 +38,13 @@ public class DriverController {
         List<LicenseCategory> licenseCategories = driverService.getAllLicenseCategories();
 
         return ResponseEntity.ok(licenseCategories);
+    }
+
+    @GetMapping("/licenses/{id}")
+    public ResponseEntity<List<DriverLicense>> getDriverLicenses (@PathVariable("id") Integer id) {
+        List<DriverLicense> licenses = driverService.getLicensesFromDriver(id);
+
+        return ResponseEntity.ok(licenses);
     }
 
     @DeleteMapping("/{id}")

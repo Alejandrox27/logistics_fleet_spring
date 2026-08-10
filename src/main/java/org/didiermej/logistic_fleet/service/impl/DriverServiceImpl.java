@@ -76,4 +76,9 @@ public class DriverServiceImpl implements DriverService {
 
         driverLicenseRepo.save(driverLicense);
     }
+
+    @Override
+    public List<DriverLicense> getLicensesFromDriver(Integer id) {
+        return driverLicenseRepo.findByDriverIdDriver(id);
+    }
 }
