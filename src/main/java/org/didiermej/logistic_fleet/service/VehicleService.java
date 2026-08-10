@@ -1,5 +1,6 @@
 package org.didiermej.logistic_fleet.service;
 
+import org.didiermej.logistic_fleet.model.Maintenance;
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
 import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;

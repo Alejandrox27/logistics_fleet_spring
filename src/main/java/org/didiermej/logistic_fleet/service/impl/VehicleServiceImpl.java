@@ -2,6 +2,7 @@ package org.didiermej.logistic_fleet.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.didiermej.logistic_fleet.model.Maintenance;
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
 import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
