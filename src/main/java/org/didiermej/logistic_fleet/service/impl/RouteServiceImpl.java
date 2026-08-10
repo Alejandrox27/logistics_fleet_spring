@@ -18,11 +18,6 @@ public class RouteServiceImpl implements RouteService {
     private final RouteRepo routeRepo;
 
     @Override
-    public Route save(Route route) {
-        return routeRepo.save(route);
-    }
-
-    @Override
     public Route update(Integer id, Route route) {
         route.setIdRoute(id);
         return routeRepo.save(route);

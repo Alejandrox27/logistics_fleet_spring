@@ -39,6 +39,5 @@ public class RouteController {
         return ResponseEntity.noContent().build();
     }
 
-    
 }
 

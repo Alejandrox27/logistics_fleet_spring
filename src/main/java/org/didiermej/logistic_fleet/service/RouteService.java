@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public interface RouteService {
-    Route save (Route route);
     Route update(Integer id, Route route);
     List<Route> findAll();
     Route findById (Integer id);
