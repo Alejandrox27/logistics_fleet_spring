@@ -2,6 +2,7 @@ package org.didiermej.logistic_fleet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Maintenance;
+import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
 import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
 import org.didiermej.logistic_fleet.service.VehicleService;
@@ -31,6 +32,13 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
+    @GetMapping("/maintenances/cost")
+    public ResponseEntity<List<MonthlyMaintenanceCostView>> getMonthlyMaintenanceCost() {
+        List<MonthlyMaintenanceCostView> monthlyMaintenanceCostView = vehicleService.getMonthlyMaintenanceCost();
+
+        return ResponseEntity.ok(monthlyMaintenanceCostView);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVehicle (@PathVariable("id") Integer id) {
         vehicleService.delete(id);
@@ -58,7 +66,16 @@ public class VehicleController {
 
         vehicleService.registerMaintenance(id, registerMaintenanceRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build(); // 201 Created sin cuerpo vacio
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PatchMapping("/{id}/maintenances/finish")
+    public ResponseEntity<Void> finishMaintenance (
+            @PathVariable("id") Integer id
+    ) {
+        vehicleService.finishMaintenance(id);
+
+        return ResponseEntity.ok().build();
     }
 
 }
