@@ -2,7 +2,10 @@ package org.didiermej.logistic_fleet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Route;
+import org.didiermej.logistic_fleet.model.dto.CompleteRouteRequest;
+import org.didiermej.logistic_fleet.model.dto.CreateRouteRequest;
 import org.didiermej.logistic_fleet.service.RouteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +36,27 @@ public class RouteController {
         return ResponseEntity.ok(updatedRoute);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> completeRoute(
+            @PathVariable("id") Integer id,
+            @RequestBody CompleteRouteRequest completeRouteRequest
+    ) {
+        routeService.completeRoute(id, completeRouteRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoute(@PathVariable("id") Integer id) {
         routeService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createRoute(@RequestBody CreateRouteRequest createRouteRequest) {
+        routeService.createRoute(createRouteRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
