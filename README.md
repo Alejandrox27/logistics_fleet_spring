@@ -90,19 +90,33 @@ Before running the application, ensure you have the following installed:
 
 ## Application Configuration
 
-Verify database connection credentials in `src/main/resources/application.properties`:
+The database credentials are **not** hardcoded in the repository. You must provide your own PostgreSQL username and password using one of the following methods:
+
+### Option 1: Environment Variables (Recommended)
+
+Set the following environment variables on your system before running the application:
+
+```bash
+# Windows (PowerShell)
+$env:DB_USERNAME="postgres"
+$env:DB_PASSWORD="your_postgres_password"
+
+# Linux / macOS
+export DB_USERNAME=postgres
+export DB_PASSWORD=your_postgres_password
+```
+
+### Option 2: Edit `application.properties` directly
+
+Open `src/main/resources/application.properties` and replace the placeholder values with your actual credentials:
 
 ```properties
-spring.application.name=logistic_fleet
-spring.jpa.database=postgresql
-spring.jpa.show-sql=false
-spring.jpa.hibernate.ddl-auto=none
-
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=jdbc:postgresql://localhost:5432/logistics_fleet_db
 spring.datasource.username=postgres
-spring.datasource.password=YOUR_POSTGRES_PASSWORD
+spring.datasource.password=your_postgres_password
 ```
+
+> **Important:** If you modify `application.properties` with your real password, make sure you do **not** commit it to a public repository.
+
 
 ---
 
