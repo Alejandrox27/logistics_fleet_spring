@@ -1,19 +1,27 @@
 package org.didiermej.logistic_fleet.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecutiryConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,6 +32,7 @@ public class SecutiryConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 // Permit all GETTERS
+                                .requestMatchers("/v1/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v1/**").permitAll()
                                 // Only ADMIN users can use POST, PUT, PATCH, DELETE
                                 .requestMatchers(HttpMethod.POST, "/v1/**").hasRole("ADMIN")
@@ -33,7 +42,12 @@ public class SecutiryConfig {
                                 // Any other request needs to be authenticated
                                 .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Basic AUTH (username and password)
+                //  Indicar que no se creen sesiones en el servidor (Stateless)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
