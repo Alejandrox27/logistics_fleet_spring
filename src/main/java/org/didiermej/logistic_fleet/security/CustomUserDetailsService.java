@@ -3,6 +3,7 @@ package org.didiermej.logistic_fleet.security;
 import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.UserInfo;
 import org.didiermej.logistic_fleet.repository.UserInfoRepo;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService{
     private final UserInfoRepo userInfoRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         // Busca el usuario en la base de datos
         UserInfo userInfo = userInfoRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
