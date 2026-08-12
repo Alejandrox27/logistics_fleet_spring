@@ -22,12 +22,13 @@ The **Logistic Fleet API** provides a backend system for managing logistics oper
 
 ---
 
-## Technologies
+### Technologies
 
 - **Java 25** (Compatibility with Java 17+)
 - **Spring Boot 3.4**
 - **Spring Data JPA / Hibernate**
-- **Spring Security** (HTTP Basic Authentication & Role-Based Access Control)
+- **Spring Security** (Stateless JWT Authentication & Role-Based Access Control)
+- **JJWT (io.jsonwebtoken)** (JSON Web Token generation & validation)
 - **PostgreSQL** (Relational Database)
 - **Lombok**
 - **Maven**
@@ -43,9 +44,10 @@ The **Logistic Fleet API** provides a backend system for managing logistics oper
   - Stored Procedures: `create_route`, `complete_route`, `register_maintenance`, `finish_maintenance`.
 - **Database Views**:
   - `vw_monthly_maintenance_cost`: Groups monthly maintenance expenses by vehicle and flags cost threshold overruns.
-- **Spring Security Layer**:
+- **Spring Security & Stateless JWT Layer**:
   - Public read-only access (`GET`) for catalog and status queries.
-  - Protected modification operations (`POST`, `PUT`, `PATCH`, `DELETE`) requiring `ROLE_ADMIN` authority.
+  - Public authentication endpoint (`POST /v1/auth/login`).
+  - Protected modification operations (`POST`, `PUT`, `PATCH`, `DELETE`) requiring valid JWT Bearer Token with `ROLE_ADMIN` authority.
   - Password hashing using `BCryptPasswordEncoder`.
 
 ---
@@ -117,7 +119,6 @@ spring.datasource.password=your_postgres_password
 
 > **Important:** If you modify `application.properties` with your real password, make sure you do **not** commit it to a public repository.
 
-
 ---
 
 ## Running the Application
@@ -138,6 +139,12 @@ The application will start on `http://localhost:8080`.
 
 ## API Endpoints
 
+### Authentication (`/v1/auth`)
+
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/v1/auth/login` | Authenticate user & receive JWT Bearer Token | Public |
+
 ### Drivers (`/v1/drivers`)
 
 | Method | Endpoint | Description | Access |
@@ -145,10 +152,10 @@ The application will start on `http://localhost:8080`.
 | `GET` | `/v1/drivers` | Retrieve all drivers | Public |
 | `GET` | `/v1/drivers/{id}` | Retrieve driver by ID | Public |
 | `GET` | `/v1/drivers/licenses-categories` | List license categories | Public |
-| `POST` | `/v1/drivers` | Register a new driver | Admin |
-| `PUT` | `/v1/drivers/{id}` | Update driver information | Admin |
-| `PATCH` | `/v1/drivers/add-license` | Assign a new license to a driver | Admin |
-| `DELETE` | `/v1/drivers/{id}` | Delete a driver | Admin |
+| `POST` | `/v1/drivers` | Register a new driver | Admin (JWT) |
+| `PUT` | `/v1/drivers/{id}` | Update driver information | Admin (JWT) |
+| `PATCH` | `/v1/drivers/add-license` | Assign a new license to a driver | Admin (JWT) |
+| `DELETE` | `/v1/drivers/{id}` | Delete a driver | Admin (JWT) |
 
 ### Vehicles (`/v1/vehicles`)
 
@@ -157,11 +164,11 @@ The application will start on `http://localhost:8080`.
 | `GET` | `/v1/vehicles` | Retrieve all vehicles | Public |
 | `GET` | `/v1/vehicles/{id}` | Retrieve vehicle by ID | Public |
 | `GET` | `/v1/vehicles/maintenances/cost` | Retrieve monthly maintenance cost view report | Public |
-| `POST` | `/v1/vehicles` | Register a new vehicle | Admin |
-| `PUT` | `/v1/vehicles/{id}` | Update vehicle details | Admin |
-| `POST` | `/v1/vehicles/{id}/maintenances` | Register maintenance entry for a vehicle | Admin |
-| `PATCH` | `/v1/vehicles/{id}/maintenances/finish` | Mark vehicle maintenance as finished | Admin |
-| `DELETE` | `/v1/vehicles/{id}` | Delete a vehicle | Admin |
+| `POST` | `/v1/vehicles` | Register a new vehicle | Admin (JWT) |
+| `PUT` | `/v1/vehicles/{id}` | Update vehicle details | Admin (JWT) |
+| `POST` | `/v1/vehicles/{id}/maintenances` | Register maintenance entry for a vehicle | Admin (JWT) |
+| `PATCH` | `/v1/vehicles/{id}/maintenances/finish` | Mark vehicle maintenance as finished | Admin (JWT) |
+| `DELETE` | `/v1/vehicles/{id}` | Delete a vehicle | Admin (JWT) |
 
 ### Routes (`/v1/routes`)
 
@@ -169,24 +176,31 @@ The application will start on `http://localhost:8080`.
 | :--- | :--- | :--- | :--- |
 | `GET` | `/v1/routes` | Retrieve all routes | Public |
 | `GET` | `/v1/routes/{id}` | Retrieve route by ID | Public |
-| `POST` | `/v1/routes` | Create and start a new route (executes `create_route`) | Admin |
-| `PATCH` | `/v1/routes/{id}` | Complete an in-progress route (executes `complete_route`) | Admin |
-| `PUT` | `/v1/routes/{id}` | Update route details | Admin |
-| `DELETE` | `/v1/routes/{id}` | Delete a route record | Admin |
+| `POST` | `/v1/routes` | Create and start a new route (executes `create_route`) | Admin (JWT) |
+| `PATCH` | `/v1/routes/{id}` | Complete an in-progress route (executes `complete_route`) | Admin (JWT) |
+| `PUT` | `/v1/routes/{id}` | Update route details | Admin (JWT) |
+| `DELETE` | `/v1/routes/{id}` | Delete a route record | Admin (JWT) |
 
 ---
 
 ## Authentication & Security
 
-The API uses **HTTP Basic Authentication**.
+The API uses **Stateless JSON Web Token (JWT) Authentication**.
 
-- **Public Endpoints (`GET`)**: Accessible without credentials.
-- **Protected Endpoints (`POST`, `PUT`, `PATCH`, `DELETE`)**: Require HTTP Basic Auth header with an account assigned the `ROLE_ADMIN` authority.
+1. **Obtain JWT Token**: Send a `POST` request to `/v1/auth/login` with your credentials:
+   ```json
+   {
+     "username": "admin",
+     "password": "admin123"
+   }
+   ```
+2. **Access Protected Endpoints**: Copy the returned `token` string and include it in the HTTP `Authorization` header for protected requests (`POST`, `PUT`, `PATCH`, `DELETE`):
+   ```http
+   Authorization: Bearer <YOUR_JWT_TOKEN>
+   ```
 
 ### Default Credentials
 
 - **Username**: `admin`
 - **Password**: `admin123`
 
-Example request header:
-`Authorization: Basic YWRtaW46YWRtaW4xMjM=`
