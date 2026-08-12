@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.didiermej.logistic_fleet.model.enums.FuelType;
 import org.didiermej.logistic_fleet.model.enums.VehicleStatus;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,10 +40,12 @@ public class Vehicle {
     private Integer axles;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "fuel_type", columnDefinition = "fuel_type")
     private FuelType fuelType;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", columnDefinition = "vehicle_status")
     private VehicleStatus status;
 }

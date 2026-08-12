@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.didiermej.logistic_fleet.model.enums.RouteStatus;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.time.LocalDate;
 
 @Data
@@ -32,6 +35,7 @@ public class Route {
     private LocalDate travelDate;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", columnDefinition = "route_status")
     private RouteStatus status;
 

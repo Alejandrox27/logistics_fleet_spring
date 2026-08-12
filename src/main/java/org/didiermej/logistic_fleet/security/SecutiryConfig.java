@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,35 +24,41 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecutiryConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Deshabilitar CSRF (estándar para APIs REST que se prueban desde Postman / Frontend)
                 .csrf(AbstractHttpConfigurer::disable)
-                // Configurar permisos de acceso por tipo de método HTTP
                 .authorizeHttpRequests(
                         auth -> auth
-                                // Permit all GETTERS
                                 .requestMatchers("/v1/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v1/**").permitAll()
-                                // Only ADMIN users can use POST, PUT, PATCH, DELETE
                                 .requestMatchers(HttpMethod.POST, "/v1/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/v1/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/v1/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN")
-                                // Any other request needs to be authenticated
                                 .anyRequest().authenticated()
                 )
-                //  Indicar que no se creen sesiones en el servidor (Stateless)
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider)
+                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -57,3 +66,4 @@ public class SecutiryConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
