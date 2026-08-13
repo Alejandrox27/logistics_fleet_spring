@@ -191,7 +191,7 @@ The API uses **Stateless JSON Web Token (JWT) Authentication**.
    ```json
    {
      "username": "admin",
-     "password": "admin123"
+     "password": "12345"
    }
    ```
 2. **Access Protected Endpoints**: Copy the returned `token` string and include it in the HTTP `Authorization` header for protected requests (`POST`, `PUT`, `PATCH`, `DELETE`):
