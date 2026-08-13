@@ -202,5 +202,5 @@ The API uses **Stateless JSON Web Token (JWT) Authentication**.
 ### Default Credentials
 
 - **Username**: `admin`
-- **Password**: `admin123`
+- **Password**: `12345`
 
