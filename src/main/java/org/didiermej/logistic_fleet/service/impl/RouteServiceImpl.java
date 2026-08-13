@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Route;
 import org.didiermej.logistic_fleet.model.dto.CompleteRouteRequest;
 import org.didiermej.logistic_fleet.model.dto.CreateRouteRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateRouteRequest;
+
 import org.didiermej.logistic_fleet.repository.RouteRepo;
 import org.didiermej.logistic_fleet.service.RouteService;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,15 @@ public class RouteServiceImpl implements RouteService {
     private final RouteRepo routeRepo;
 
     @Override
-    public Route update(Integer id, Route route) {
-        route.setIdRoute(id);
+    public Route update(Integer id, UpdateRouteRequest updateRouteRequest) {
+        Route route = routeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("The route with id " + id + " does not exist"));
+        route.setOrigin(updateRouteRequest.getOrigin());
+        route.setDestination(updateRouteRequest.getDestination());
+        route.setDistance(updateRouteRequest.getDistance());
+        route.setFuelConsumed(updateRouteRequest.getFuelConsumed());
+        route.setTravelDate(updateRouteRequest.getTravelDate());
+
         return routeRepo.save(route);
     }
 

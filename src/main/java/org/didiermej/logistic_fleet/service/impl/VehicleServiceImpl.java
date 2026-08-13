@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Maintenance;
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
+import org.didiermej.logistic_fleet.model.dto.CreateVehicleRequest;
 import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateVehicleRequest;
 import org.didiermej.logistic_fleet.repository.MaintenanceRepo;
 import org.didiermej.logistic_fleet.repository.MonthlyMaintenanceCostViewRepo;
 import org.didiermej.logistic_fleet.repository.VehicleRepo;
@@ -23,13 +25,29 @@ public class VehicleServiceImpl implements VehicleService {
     private final MonthlyMaintenanceCostViewRepo monthlyMaintenanceCostViewRepo;
 
     @Override
-    public Vehicle save(Vehicle vehicle) {
+    public Vehicle save(CreateVehicleRequest createVehicleRequest) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setNumberPlate(createVehicleRequest.getNumberPlate());
+        vehicle.setBrand(createVehicleRequest.getBrand());
+        vehicle.setModel(createVehicleRequest.getModel());
+        vehicle.setLoadCapacity(createVehicleRequest.getLoadCapacity());
+        vehicle.setMileage(createVehicleRequest.getMileage());
+        vehicle.setAxles(createVehicleRequest.getAxles());
+        vehicle.setFuelType(createVehicleRequest.getFuelType());
         return vehicleRepo.save(vehicle);
     }
 
     @Override
-    public Vehicle update(Integer id, Vehicle vehicle) {
-        vehicle.setIdVehicle(id);
+    public Vehicle update(Integer id, UpdateVehicleRequest updateVehicleRequest) {
+        Vehicle vehicle = vehicleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("The vehicle with id " + id + " does not exist"));
+        vehicle.setNumberPlate(updateVehicleRequest.getNumberPlate());
+        vehicle.setBrand(updateVehicleRequest.getBrand());
+        vehicle.setModel(updateVehicleRequest.getModel());
+        vehicle.setLoadCapacity(updateVehicleRequest.getLoadCapacity());
+        vehicle.setMileage(updateVehicleRequest.getMileage());
+        vehicle.setAxles(updateVehicleRequest.getAxles());
+        vehicle.setFuelType(updateVehicleRequest.getFuelType());
         return vehicleRepo.save(vehicle);
     }
 

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Maintenance;
 import org.didiermej.logistic_fleet.model.MonthlyMaintenanceCostView;
 import org.didiermej.logistic_fleet.model.Vehicle;
+import org.didiermej.logistic_fleet.model.dto.CreateVehicleRequest;
 import org.didiermej.logistic_fleet.model.dto.RegisterMaintenanceRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateVehicleRequest;
 import org.didiermej.logistic_fleet.service.VehicleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,15 +49,15 @@ public class VehicleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable("id") Integer id, @RequestBody Vehicle vehicle) {
-        Vehicle updatedVehicle = vehicleService.update(id, vehicle);
+    public ResponseEntity<Vehicle> updateVehicle(@PathVariable("id") Integer id, @RequestBody UpdateVehicleRequest updateVehicleRequest) {
+        Vehicle updatedVehicle = vehicleService.update(id, updateVehicleRequest);
 
         return ResponseEntity.ok(updatedVehicle);
     }
 
     @PostMapping
-    public ResponseEntity<Vehicle> addVehicle(@RequestBody Vehicle vehicle) {
-        Vehicle savedVehicle = vehicleService.save(vehicle);
+    public ResponseEntity<Vehicle> addVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) {
+        Vehicle savedVehicle = vehicleService.save(createVehicleRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicle);
     }
 

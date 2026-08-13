@@ -5,6 +5,8 @@ import org.didiermej.logistic_fleet.model.Driver;
 import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
 import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
+import org.didiermej.logistic_fleet.model.dto.CreateDriverRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateDriverRequest;
 import org.didiermej.logistic_fleet.service.DriverService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,15 +63,15 @@ public class DriverController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Driver> updateDriver(@PathVariable("id") Integer id, @RequestBody Driver driver) {
-        Driver updatedDriver = driverService.update(id, driver);
+    public ResponseEntity<Driver> updateDriver(@PathVariable("id") Integer id, @RequestBody UpdateDriverRequest updateDriverRequest) {
+        Driver updatedDriver = driverService.update(id, updateDriverRequest);
 
         return ResponseEntity.ok(updatedDriver);
     }
 
     @PostMapping
-    public ResponseEntity<Driver> addDriver(@RequestBody Driver driver) {
-        Driver savedDriver = driverService.save(driver);
+    public ResponseEntity<Driver> addDriver(@RequestBody CreateDriverRequest createDriverRequest) {
+        Driver savedDriver = driverService.save(createDriverRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDriver);
     }
 

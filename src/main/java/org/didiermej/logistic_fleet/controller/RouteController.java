@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.didiermej.logistic_fleet.model.Route;
 import org.didiermej.logistic_fleet.model.dto.CompleteRouteRequest;
 import org.didiermej.logistic_fleet.model.dto.CreateRouteRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateRouteRequest;
+
 import org.didiermej.logistic_fleet.service.RouteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,8 @@ public class RouteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Route> updateRoute(@PathVariable("id") Integer id, @RequestBody Route route) {
-        Route updatedRoute = routeService.update(id, route);
+    public ResponseEntity<Route> updateRoute(@PathVariable("id") Integer id, @RequestBody UpdateRouteRequest updateRouteRequest) {
+        Route updatedRoute = routeService.update(id, updateRouteRequest);
         return ResponseEntity.ok(updatedRoute);
     }
 

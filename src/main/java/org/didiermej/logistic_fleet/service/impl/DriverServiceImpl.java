@@ -6,6 +6,8 @@ import org.didiermej.logistic_fleet.model.Driver;
 import org.didiermej.logistic_fleet.model.DriverLicense;
 import org.didiermej.logistic_fleet.model.LicenseCategory;
 import org.didiermej.logistic_fleet.model.dto.AddLicenseDriverRequest;
+import org.didiermej.logistic_fleet.model.dto.CreateDriverRequest;
+import org.didiermej.logistic_fleet.model.dto.UpdateDriverRequest;
 import org.didiermej.logistic_fleet.repository.DriverLicenseRepo;
 import org.didiermej.logistic_fleet.repository.DriverRepo;
 import org.didiermej.logistic_fleet.repository.LicenseCategoryRepo;
@@ -23,13 +25,25 @@ public class DriverServiceImpl implements DriverService {
     private final LicenseCategoryRepo licenseCategoryRepo;
 
     @Override
-    public Driver save(Driver driver) {
+    public Driver save(CreateDriverRequest createDriverRequest) {
+        Driver driver = new Driver();
+        driver.setNumIdentification(createDriverRequest.getNumIdentification());
+        driver.setName(createDriverRequest.getName());
+        driver.setLastname(createDriverRequest.getLastname());
+        driver.setSecondLastname(createDriverRequest.getSecondLastname());
+        driver.setContratationDate(createDriverRequest.getContratationDate());
         return driverRepo.save(driver);
     }
 
     @Override
-    public Driver update(Integer id, Driver driver) {
-        driver.setIdDriver(id);
+    public Driver update(Integer id, UpdateDriverRequest updateDriverRequest) {
+        Driver driver = driverRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("driver with id " + id + " not found"));
+        driver.setNumIdentification(updateDriverRequest.getNumIdentification());
+        driver.setName(updateDriverRequest.getName());
+        driver.setLastname(updateDriverRequest.getLastname());
+        driver.setSecondLastname(updateDriverRequest.getSecondLastname());
+        driver.setContratationDate(updateDriverRequest.getContratationDate());
         return driverRepo.save(driver);
     }
 
